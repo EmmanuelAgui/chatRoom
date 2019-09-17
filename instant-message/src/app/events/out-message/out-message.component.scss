@@ -1,0 +1,52 @@
+.row{
+  display: flex;
+  justify-content: flex-end;
+}
+.message {
+    margin-top: 15px;
+}
+
+.msg-col {
+    text-align: right;
+}
+
+.col-2{
+  flex: 0;
+}
+.user-col {
+    padding-left: 0;
+}
+
+.user {
+    background: #a3e3ed;
+    border-radius: 100px;
+    width: 55px;
+    height: 55px;
+    text-align: center;
+    padding-top: 9px;
+    font-size: 25px;
+    color: #384648;
+}
+
+.out-message {
+    background: #e8f5f7;
+    display: inline-block;
+    color: #394648;
+    border-radius: 14px;
+    margin-top: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+    max-width: 100%;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    overflow-wrap: break-word;
+}
+
+.fa-caret-left {
+    position: absolute;
+    top: 9px;
+    right: 11px;
+    font-size: 22px !important;
+    color: #e8f5f7;
+    transform: rotate(180deg);
+}

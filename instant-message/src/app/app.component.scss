@@ -1,0 +1,77 @@
+.main {
+    background: #384648;
+    height: 100%;
+}
+
+.header {
+        background: #88c3cc;
+}
+
+.title {
+    text-align: center;
+    color: white;
+    font-size: 30px;
+}
+
+.message-container {
+    background: #394648;
+    color: white;
+    height: 87.2%;
+    overflow: auto;
+    padding-bottom: 10px;
+
+}
+
+.fixed-text-box {
+    position: fixed;
+    bottom: 0px;
+    max-width: 100%;
+    width: 1140px;
+    background: #88c3cc;
+    margin-top: 10px;
+    padding-bottom: 5px;
+}
+
+.message-input {
+    width: 100%;
+    border-radius: 5px 0 0 5px;
+    margin-top: 11px;
+    padding-left: 10px;
+    padding-right: 25px;
+    border: 1.5px solid #384648;
+    background: white;
+    overflow: auto;
+    word-wrap: break-word;
+}
+
+.send {
+  margin-top: 11px;
+  border: none;
+  width: 30px;
+  min-height: 30px;
+  max-height: 101px;
+  background: #5D9199;
+  color: white;
+  border-radius: 0 5px 5px 0;
+}
+
+
+.change-to-circle {
+    border-radius: 50px;
+    width: 25px;
+    height: 25px;
+    right: 19px;
+    bottom: 5px;
+}
+
+.msg-holder {
+    height: auto
+}
+form{
+  display: flex;
+  justify-content: flex-start;
+}
+
+.col-2{
+  flex: 0;
+}

@@ -1,0 +1,68 @@
+<div class="container main">
+    <div class="row header">
+        <div class="col title">
+            messenger
+        </div>
+    </div>
+    <div class="container message-container">
+        <div *ngFor="let event of allEvents; let index = index trackBy: trackByIndex">
+
+            <app-in-message
+                *ngIf="event.eventType === 'MSG' && event.user.id !== user?.id"
+                [message]='event'
+                [username]='event.user.username'
+            >
+            </app-in-message>
+
+            <div (contextmenu)="contextMenu($event,template,event)">
+              <app-out-message
+                *ngIf="event.eventType === 'MSG' && event.user.id === user?.id"
+                 [message]='event'
+                 [username]='event.user.username'
+            >
+            
+            </app-out-message>
+            </div>
+            <app-system-info
+                *ngIf="event.eventType === 'SYSTEM_INFO'"
+                [systemInfo]='event'
+                >
+
+            </app-system-info>
+
+        </div>
+    </div>
+    <div class="row fixed-text-box">
+        <div class="col">
+            <form [formGroup]="messageForm" (ngSubmit)="onSubmit(messageForm)">
+                <textarea
+                    type="text"
+                    formControlName="msg"
+                    class="message-input"
+                    resize="none"
+                    appDynamicTextarea
+                    [minHeight]="29"
+                    [maxHeight]="100"
+                >
+                </textarea>
+                <button
+                    type="submit"
+                    [disabled]="messageForm.invalid"
+                    class="send"
+                >
+                    <i class="fa fa-angle-double-up"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<app-sign-in
+    (loginUser)="loginUser($event)"
+></app-sign-in>
+
+<ng-template #template>
+    <ul nz-menu nzInDropDown>
+      <li nz-menu-item (click)="withdraw()">撤回</li>
+    </ul>
+  </ng-template>

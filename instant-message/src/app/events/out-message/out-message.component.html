@@ -1,0 +1,21 @@
+<div class="row message">
+    <!-- <div class="col-1"></div> -->
+    <div class="col-9 msg-col">
+        <div *ngIf="message.messageType==='TEXT'" class="out-message">
+            {{ message.content }}
+            <i class="fa fa-caret-left"></i>
+        </div>
+        <a *ngIf="message.messageType==='IMG'" href="{{message.content}}" target="blank"><img  style="width:100%;max-width: 300px; border-radius:5px;" src="{{message.content}}" alt="图片"></a>
+
+        <!-- <img *ngIf="message.messageType==='IMG'" style="width:100%;border-radius:5px;" src="{{message.content}}" alt="图片"> -->
+        <!-- <div *ngIf="message.messageType==='IMG'" class="out-message">
+          <img width="100" src="{{message.content}}" alt="图片">
+          <i class="fa fa-caret-left"></i>
+        </div> -->
+    </div>
+    <div class="col-2 user-col">
+        <div class="user myself">
+            {{ username.split('')[0] }}
+        </div>
+    </div>
+</div>
