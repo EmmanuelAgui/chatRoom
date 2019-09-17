@@ -120,7 +120,7 @@ export class AppComponent implements OnInit {
   }
 
   onSubmit(form: FormGroup): void {
-    const msg = form.controls['msg'].value;
+    const msg = form.controls['msg'].value.trim();
     let newMsg;
     switch (msg) {
       case '图片':

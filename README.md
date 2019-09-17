@@ -19,3 +19,10 @@
 ## Access
    + Client runs on `localhost:4200`
    + Server runs on `localhost: 8383`
+
+
+## Use
+1.  输入用户名回车即注册登录聊天室（会有系统欢迎信息，其他客户端会有系统提示信息 ××× has joined the chat）
+2.  输入文字信息按发送按钮即发送
+3.  输入图片二字，按发送信息，即随机出现一张图片
+4.  在自己发送的消息右键，撤回，即可撤回信息，并有系统提示
