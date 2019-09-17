@@ -4,16 +4,16 @@
 ## Slides
 
 ## Install
-1. `$ cd Instant-Messages/instant-messages`
+1. `$ cd chatRoom/instant-messages`
 2. `$ npm install`
-3. `$ cd Instant-Messages/server`
+3. `$ cd chatRoom/server`
 4. `$ npm install`
 
 ## Run
-1. `$ cd Instant-Messages/instant-messages`
+1. `$ cd chatRoom/instant-messages`
 2. `$ ng serve`
 3. *new terminal*
-4. `$ cd Instant-Messages/server/src`
+4. `$ cd chatRoom/server/src`
 5. `$ node index.js`
 
 ## Access
