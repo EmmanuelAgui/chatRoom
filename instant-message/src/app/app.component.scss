@@ -33,8 +33,7 @@
 }
 
 .message-input {
-    width: 100%;
-    border-radius: 5px 0 0 5px;
+    width: 70%;
     margin-top: 11px;
     padding-left: 10px;
     padding-right: 25px;
@@ -53,6 +52,15 @@
   background: #5D9199;
   color: white;
   border-radius: 0 5px 5px 0;
+}
+.sendImg{
+  margin-top: 11px;
+  border: none;
+  min-height: 30px;
+  max-height: 101px;
+  background: #5D9199;
+  color: white;
+  border-radius: 5px 0 0 5px;
 }
 
 

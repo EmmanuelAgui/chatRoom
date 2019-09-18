@@ -35,6 +35,9 @@
     <div class="row fixed-text-box">
         <div class="col">
             <form [formGroup]="messageForm" (ngSubmit)="onSubmit(messageForm)">
+                <button class="sendImg" (click)="sendImg()">
+                    图片
+                  </button>
                 <textarea
                     type="text"
                     formControlName="msg"

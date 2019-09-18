@@ -54,6 +54,7 @@ export class AppComponent implements OnInit {
   initIoConnection(): void {
     this.socketService.initSocket();
 
+    // 订阅聊天消息流
     this.msgConnection = this.socketService.onMessage()
       .subscribe((res) => {
         if (this.user) {
@@ -62,11 +63,13 @@ export class AppComponent implements OnInit {
         }
       });
 
+    // 订阅新用户加入提示信息流
     this.userConnection = this.socketService.onNewUser()
       .subscribe((user: UserModel) => {
         this.handleSystemInfo(user, SystemInfoType.NEW_USER);
       });
 
+    // 订阅用户撤回提示信息流
     this.userRecall = this.socketService.onUserRecall()
       .subscribe((message: Message) => {
         this.handleSystemInfo(message.user, SystemInfoType.RECALL);
@@ -75,7 +78,7 @@ export class AppComponent implements OnInit {
           this.allEvents = this.allEvents.filter(item => item.messageId !== message.messageId);
         }
       });
-
+    // 订阅用户离开提示信息流
     this.userLeft = this.socketService.onUserLeft()
       .subscribe((user: UserModel) => {
         const isCurrentUser = this.isCurrentUser(user);
@@ -90,6 +93,7 @@ export class AppComponent implements OnInit {
       .subscribe(() => console.log('disconnected'));
   }
 
+  /* 处理系统信息 */
   handleSystemInfo = (user: UserModel, infoType: SystemInfoType) => {
     // check if new user is the current user, if so, skip notifying user
     const isCurrentUser = this.isCurrentUser(user);
@@ -99,22 +103,23 @@ export class AppComponent implements OnInit {
       this.addSystemInfo(user, infoType, true);
     }
   }
-
+  /* 添加系统信息 */
   addSystemInfo(user: UserModel, infoType: SystemInfoType, isCurrentUser: boolean) {
     const newSystemInfo = new SystemInfoModel(user, infoType, isCurrentUser);
     this.allEvents.push(newSystemInfo);
     this.scrollToBottom();
   }
-
+  /* 滚动到底部 */
   scrollToBottom = () => {
     const msgContainer = document.getElementById('message-container');
     msgContainer.scrollTop = msgContainer.scrollHeight;
   }
 
+  /* 是否当前用户 */
   isCurrentUser = (user: UserModel) => {
     return (this.user && user.id === this.user.id);
   }
-
+  /* 聊天输入表单 */
   initMessageForm(): void {
     this.messageForm = this.fb.group({
       msg: [null, Validators.required]
@@ -126,27 +131,26 @@ export class AppComponent implements OnInit {
     this.selectedMessage = message;
     this.dropdown = this.nzDropdownService.create($event, template);
   }
-
+  /* 撤回消息 */
   recall(): void {
     this.allEvents = this.allEvents.filter(item => item.messageId !== this.selectedMessage.messageId);
     this.dropdown.close();
     this.socketService.sendRecall(this.selectedMessage);
   }
-
+  /* 提交发送聊天内容 */
   onSubmit(form: FormGroup): void {
-    const msg = form.controls['msg'].value.trim();
-    let newMsg;
-    switch (msg) {
-      case '图片':
-        const randId = Math.floor(Math.random() * 10);
-        const url = this.images[randId];
-        newMsg = new Message(this.user, url, MessageType.IMG);
-        break;
-      default:
-        newMsg = new Message(this.user, msg, MessageType.TEXT);
-    }
+    const msg = form.controls['msg'].value;
+    const newMsg = new Message(this.user, msg, MessageType.TEXT);
     this.socketService.sendMessage(newMsg);
     this.messageForm.reset();
+  }
+
+  sendImg() {
+    const randId = Math.floor(Math.random() * 10);
+    const url = this.images[randId];
+    const newMsg = new Message(this.user, url, MessageType.IMG);
+    this.socketService.sendMessage(newMsg);
+    return false;
   }
 
   trackByIndex(index) {
@@ -156,15 +160,18 @@ export class AppComponent implements OnInit {
   loginUser(user: UserModel) {
     this.user = user;
   }
-
+  /* 用户离开聊天室 */
   leavingRoom = () => {
+    // 取消所有订阅
     this.msgConnection.unsubscribe();
     this.userConnection.unsubscribe();
     this.userRecall.unsubscribe();
     this.userLeft.unsubscribe();
+    // 发送离开相关信息
     const newMsg = new Message(this.user, '我先撤啦，后会有期', MessageType.TEXT);
     this.socketService.sendMessage(newMsg);
     this.socketService.sendUserLeaving(this.user);
+    this.user = undefined;
   }
 
 }
