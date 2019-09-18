@@ -19,7 +19,7 @@ export class SystemInfoModel {
         this.info = 'has left the chat';
         break;
       case SystemInfoType.WITHDRAW:
-        this.info = isCurrentUser ? ' You recalled a message' : 'has recalled a message';
+        this.info = isCurrentUser ? ' You recalled a message' : ' recalled a message';
     }
   }
 }

@@ -93,7 +93,7 @@ export class AppComponent implements OnInit {
   handleSystemInfo = (user: UserModel, infoType: SystemInfoType) => {
     // check if new user is the current user, if so, skip notifying user
     const isCurrentUser = this.isCurrentUser(user);
-    if (!isCurrentUser) {
+    if (this.user && !isCurrentUser) {
       this.addSystemInfo(user, infoType, false);
     } else if (isCurrentUser) {
       this.addSystemInfo(user, infoType, true);
@@ -109,8 +109,9 @@ export class AppComponent implements OnInit {
   scrollToBottom = () => {
     const msgContainer = document.getElementById('message-container');
     const shouldScroll = msgContainer.scrollTop + msgContainer.clientHeight === msgContainer.scrollHeight;
-    msgContainer.scrollTop = msgContainer.scrollHeight - msgContainer.clientHeight;
-    // window.scrollTo(document.body.scrollHeight, 0);
+    if (shouldScroll) {
+      msgContainer.scrollTop = msgContainer.scrollHeight - msgContainer.clientHeight;
+    }
   }
 
   isCurrentUser = (user: UserModel) => {
