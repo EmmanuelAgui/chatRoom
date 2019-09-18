@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
 
   msgConnection: any;
   userConnection: any;
-  userWithdraw: any;
+  userRecall: any;
   userLeft: any;
   private dropdown: NzDropdownContextComponent;
 
@@ -67,9 +67,9 @@ export class AppComponent implements OnInit {
         this.handleSystemInfo(user, SystemInfoType.NEW_USER);
       });
 
-    this.userWithdraw = this.socketService.onUserWithdraw()
+    this.userRecall = this.socketService.onUserRecall()
       .subscribe((message: Message) => {
-        this.handleSystemInfo(message.user, SystemInfoType.WITHDRAW);
+        this.handleSystemInfo(message.user, SystemInfoType.RECALL);
         const isCurrentUser = this.isCurrentUser(message.user);
         if (!isCurrentUser) {
           this.allEvents = this.allEvents.filter(item => item.messageId !== message.messageId);
@@ -79,7 +79,7 @@ export class AppComponent implements OnInit {
     this.userLeft = this.socketService.onUserLeft()
       .subscribe((user: UserModel) => {
         const isCurrentUser = this.isCurrentUser(user);
-        if (!isCurrentUser) {
+        if (this.user && !isCurrentUser) {
           this.addSystemInfo(user, SystemInfoType.USER_LEFT, false);
         }
       });
@@ -108,10 +108,7 @@ export class AppComponent implements OnInit {
 
   scrollToBottom = () => {
     const msgContainer = document.getElementById('message-container');
-    const shouldScroll = msgContainer.scrollTop + msgContainer.clientHeight === msgContainer.scrollHeight;
-    if (shouldScroll) {
-      msgContainer.scrollTop = msgContainer.scrollHeight - msgContainer.clientHeight;
-    }
+    msgContainer.scrollTop = msgContainer.scrollHeight;
   }
 
   isCurrentUser = (user: UserModel) => {
@@ -130,10 +127,10 @@ export class AppComponent implements OnInit {
     this.dropdown = this.nzDropdownService.create($event, template);
   }
 
-  withdraw(): void {
+  recall(): void {
     this.allEvents = this.allEvents.filter(item => item.messageId !== this.selectedMessage.messageId);
     this.dropdown.close();
-    this.socketService.sendWithdraw(this.selectedMessage);
+    this.socketService.sendRecall(this.selectedMessage);
   }
 
   onSubmit(form: FormGroup): void {
@@ -161,6 +158,10 @@ export class AppComponent implements OnInit {
   }
 
   leavingRoom = () => {
+    this.msgConnection.unsubscribe();
+    this.userConnection.unsubscribe();
+    this.userRecall.unsubscribe();
+    this.userLeft.unsubscribe();
     const newMsg = new Message(this.user, '我先撤啦，后会有期', MessageType.TEXT);
     this.socketService.sendMessage(newMsg);
     this.socketService.sendUserLeaving(this.user);

@@ -25,8 +25,8 @@ export class SocketService {
   }
 
   /* 撤回消息 */
-  sendWithdraw(message: Message) {
-    this.socket.emit('WITHDRAW_MSG', message);
+  sendRecall(message: Message) {
+    this.socket.emit('RECALL_MSG', message);
   }
 
   /* 当前用户离开聊天室 */
@@ -49,9 +49,9 @@ export class SocketService {
   }
 
   /* 接收系统消息：用户撤回消息 */
-  onUserWithdraw() {
+  onUserRecall() {
     return new Observable<any>(observer => {
-      this.socket.on('WITHDRAW_MSG', message => observer.next(message));
+      this.socket.on('RECALL_MSG', message => observer.next(message));
     });
   }
 

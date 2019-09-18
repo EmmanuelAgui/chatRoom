@@ -24,8 +24,8 @@ io.on("connection", function (socket) {
     console.log(msg);
   });
 
-  socket.on("WITHDRAW_MSG", function (message) {
-    io.emit("WITHDRAW_MSG", message);
+  socket.on("RECALL_MSG", function (message) {
+    io.emit("RECALL_MSG", message);
   })
 
   socket.on("USER_LEAVING", function (user) {
