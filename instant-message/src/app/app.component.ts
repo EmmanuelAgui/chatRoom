@@ -58,6 +58,7 @@ export class AppComponent implements OnInit {
       .subscribe((res) => {
         if (this.user) {
           this.allEvents.push(res);
+          this.scrollToBottom();
         }
       });
 
@@ -69,14 +70,16 @@ export class AppComponent implements OnInit {
     this.userWithdraw = this.socketService.onUserWithdraw()
       .subscribe((message: Message) => {
         this.handleSystemInfo(message.user, SystemInfoType.WITHDRAW);
-        if (this.user && message.user.id !== this.user.id) {
+        const isCurrentUser = this.isCurrentUser(message.user);
+        if (!isCurrentUser) {
           this.allEvents = this.allEvents.filter(item => item.messageId !== message.messageId);
         }
       });
 
     this.userLeft = this.socketService.onUserLeft()
       .subscribe((user: UserModel) => {
-        if (this.user && user.id !== this.user.id) {
+        const isCurrentUser = this.isCurrentUser(user);
+        if (!isCurrentUser) {
           this.addSystemInfo(user, SystemInfoType.USER_LEFT, false);
         }
       });
@@ -89,9 +92,10 @@ export class AppComponent implements OnInit {
 
   handleSystemInfo = (user: UserModel, infoType: SystemInfoType) => {
     // check if new user is the current user, if so, skip notifying user
-    if (this.user && user.id !== this.user.id) {
+    const isCurrentUser = this.isCurrentUser(user);
+    if (!isCurrentUser) {
       this.addSystemInfo(user, infoType, false);
-    } else if (this.user && user.id === this.user.id) {
+    } else if (isCurrentUser) {
       this.addSystemInfo(user, infoType, true);
     }
   }
@@ -99,6 +103,18 @@ export class AppComponent implements OnInit {
   addSystemInfo(user: UserModel, infoType: SystemInfoType, isCurrentUser: boolean) {
     const newSystemInfo = new SystemInfoModel(user, infoType, isCurrentUser);
     this.allEvents.push(newSystemInfo);
+    this.scrollToBottom();
+  }
+
+  scrollToBottom = () => {
+    const msgContainer = document.getElementById('message-container');
+    const shouldScroll = msgContainer.scrollTop + msgContainer.clientHeight === msgContainer.scrollHeight;
+    msgContainer.scrollTop = msgContainer.scrollHeight - msgContainer.clientHeight;
+    // window.scrollTo(document.body.scrollHeight, 0);
+  }
+
+  isCurrentUser = (user: UserModel) => {
+    return (this.user && user.id === this.user.id);
   }
 
   initMessageForm(): void {
